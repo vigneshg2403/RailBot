@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rail Bot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+        }
+        #chat-header {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px 12px 0 0;
+        }
+        #chat-body {
+            height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #ccc;
+        }
+        #chat-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+            background: white;
+            border-radius: 0 0 12px 12px;
+        }
+        #chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            outline: none;
+            border-radius: 0 0 0 12px;
+        }
+        #chat-input button {
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 0 0 12px 0;
+        }
+        .chat-message {
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 8px;
+        }
+        .user-message {
+            background: #007bff;
+            color: white;
+            text-align: right;
+        }
+        .bot-message {
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-black">
+    <div class="text-center py-6 text-2xl font-extrabold text-blue-600">
+        Rail Bot 🚆
+    </div>
+    <div class="grid grid-cols-3 gap-4 mb-6 px-6">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold shadow-md transition">Local Trains</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold shadow-md transition">Internet</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold shadow-md transition">Ticket Counter</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-lg font-semibold shadow-md transition">Water</button>
+    </div>
+    <div class="grid grid-cols-3 gap-6 px-6">
+        <div class="p-4 bg-white rounded-lg shadow-md border-l-4 border-blue-500">
+            <p class="font-semibold">Chennai Beach - Velachery</p>
+            <p>🟢 Every 15 min | ⏰ 04:10 - 23:30</p>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-md border-l-4 border-blue-500">
+            <p class="font-semibold">Chennai Central - Arakkonam</p>
+            <p>🟢 Every 20 min | ⏰ 04:00 - 23:00</p>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-md border-l-4 border-blue-500">
+            <p class="font-semibold">Chennai Beach - Tambaram</p>
+            <p>🟢 Every 10 min | ⏰ 04:15 - 23:45</p>
+        </div>
+    </div>
+    <div id="root"></div>
+    <!-- Chatbot Section -->
+    <div id="chatbot">
+        <div id="chat-header">Chat Support 💬</div>
+        <div id="chat-body"></div>
+        <div id="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <button class="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg transition" onclick="toggleChatbot()">💬 Chat</button>
+    
+    <script>
+        function toggleChatbot() {
+            const chatbot = document.getElementById("chatbot");
+            chatbot.style.display = chatbot.style.display === "none" ? "flex" : "none";
+        }
+
+        function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const message = inputField.value.trim();
+            if (message) {
+                const chatBody = document.getElementById("chat-body");
+                const userMessage = `<div class='chat-message user-message'><strong>You:</strong> ${message}</div>`;
+                chatBody.innerHTML += userMessage;
+                inputField.value = "";
+                chatBody.scrollTop = chatBody.scrollHeight;
+                setTimeout(() => {
+                    let botResponse;
+                    switch (message.toLowerCase()) {
+                        case "hello" || "hi":
+                            botResponse = "Hello! How can I assist you?";
+                            break;
+                        case "train schedule":
+                            botResponse = "Please specify the route you are looking for.";
+                            break;
+                        case "ticket price":
+                            botResponse = "Ticket prices vary by destination. Please enter your route.";
+                            break;
+                        case "station facilities":
+                            botResponse = "Stations have waiting areas, restrooms, ticket counters, and food stalls.";
+                            break;
+                        case "lost and found":
+                            botResponse = "Please visit the station's lost and found counter or call the helpline.";
+                            break;
+                        case "platform number":
+                            botResponse = "Please enter your train number to get platform details.";
+                            break;
+                        default:
+                            botResponse = "How can I assist you?";
+                    }
+                    const botMessage = `<div class='chat-message bot-message'><strong>Bot:</strong> ${botResponse}</div>`;
+                    chatBody.innerHTML += botMessage;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
